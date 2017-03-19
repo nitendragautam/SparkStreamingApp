@@ -1,4 +1,4 @@
-package edu.ndsu.sparkstreaming.services
+package com.nitendragautam.sparkstreaming.services
 
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka.KafkaUtils
@@ -15,17 +15,17 @@ class SparkServices {
 
   def startSparkCluster(masterConfig :String){
 val conf =
-  new SparkConf().setAppName("KafkaTest")
+  new SparkConf().setAppName("SparkStreamingApp")
 
     val ssc = new StreamingContext(conf,Seconds(10))
 
     val kafkaParams = Map[String,String]("metadata.broker.list" -> "192.168.184.131:9093");
-    val topics = List(("inputMessage", 1)).toMap
-val topic = Set("inputMessage")
+    val topics = List(("testTopic", 1)).toMap
+val topic = Set("testTopic")
 
 val dataStream =
   KafkaUtils
-    .createStream(ssc ,"192.168.184.131:2181","inputMessageGroup",topics)
+    .createStream(ssc ,"192.168.184.131:2181","testTopic",topics)
 
     dataStream.foreachRDD(rdd =>{
       logger.info("Created Kafka Stream ")

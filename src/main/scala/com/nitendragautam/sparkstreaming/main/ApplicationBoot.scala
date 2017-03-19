@@ -1,6 +1,6 @@
-package edu.ndsu.sparkstreaming.main
+package com.nitendragautam.sparkstreaming.main
 
-import edu.ndsu.sparkstreaming.services.SparkServices
+import com.nitendragautam.sparkstreaming.services.SparkServices
 
 /**
 *Main Entry

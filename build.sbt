@@ -1,5 +1,5 @@
 
-organization := "edu.ndsu"
+organization := "com.nitendragautam"
 
 version := "1.0"
 
@@ -7,7 +7,7 @@ scalaVersion := "2.11.8"
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-encoding", "utf8")
 
-mainClass in assembly := Some("edu.ndsu.sparkstreaming.main.ApplicationBoot")
+mainClass in assembly := Some("com.nitendragautam.sparkstreaming.main.ApplicationBoot")
 assemblyJarName in assembly := "sparkstreamingjob.jar"
 libraryDependencies ++= {
 val sparkV     =  "2.0.1"
