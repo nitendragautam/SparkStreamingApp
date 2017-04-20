@@ -9,7 +9,7 @@ import org.slf4j.{Logger, LoggerFactory}
 /**
   * Spark Services
   */
-class SparkServices {
+class SparkServices extends Serializable{
 
   private val logger: Logger =
     LoggerFactory.getLogger(classOf[SparkServices])
