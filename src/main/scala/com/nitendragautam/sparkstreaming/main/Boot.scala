@@ -5,7 +5,7 @@ import com.nitendragautam.sparkstreaming.services.SparkServices
 /**
 *Main Entry
  */
-object ApplicationBoot {
+object Boot {
   def main(args: Array[String]) {
 val sr = new SparkServices
 sr.startSparkStreamingCluster()

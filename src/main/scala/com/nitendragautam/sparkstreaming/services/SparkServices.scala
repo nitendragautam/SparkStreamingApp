@@ -7,7 +7,7 @@ import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.slf4j.{Logger, LoggerFactory}
 
 /**
-  * Spark Utility Classes.
+  * Spark Services
   */
 class SparkServices {
 
@@ -18,8 +18,8 @@ class SparkServices {
 val conf =
   new SparkConf().setAppName("SparkStreamingApp")
 
-    val ssc = new StreamingContext(conf,Seconds(10))
-    val kafkaTopic="testTopic"
+    val ssc = new StreamingContext(conf,Seconds(3))
+    val kafkaTopic="ndsloganalytics_raw_events"
     // need to use the hostname:port for Kafka brokers, not Zookeeper
     val kafkaParams = Map[String,String]("metadata.broker.list" -> "192.168.184.131:9092,192.168.184.131:9093,192.168.184.131:9094");
 val topic = List(kafkaTopic).toSet
@@ -33,7 +33,9 @@ val topic = List(kafkaTopic).toSet
 
     directKafkaStream.foreachRDD(rdd=>
 rdd.foreach(record =>
-           logger.info(record._2)
+  //Process Kafka Records
+  processKafkaRecords(record._2)
+
 )
 )
 
@@ -45,4 +47,12 @@ rdd.foreach(record =>
   }
 
 
+
+  /*
+  Process Kafka Records
+   */
+
+  def processKafkaRecords(kafkaRecord: String): Unit ={
+logger.info("SparkStreaming App Record "+kafkaRecord)
+  }
 }
