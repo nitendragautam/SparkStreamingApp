@@ -2,7 +2,7 @@ package com.nitendragautam.sparkstreaming.services
 
 import java.util.HashMap
 
-import kafka.serializer.{DefaultDecoder, StringDecoder}
+import kafka.serializer.StringDecoder
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka.KafkaUtils
@@ -18,8 +18,7 @@ class SparkServices extends Serializable{
     LoggerFactory.getLogger(classOf[SparkServices])
 
   def startSparkStreamingCluster(){
-val conf =
-  new SparkConf().setAppName("SparkStreamingApp")
+val conf = new SparkConf().setAppName("SparkStreamingApp")
 
     val ssc = new StreamingContext(conf,Seconds(3))
 
@@ -68,10 +67,22 @@ val kafkaSink = ssc.sparkContext.broadcast(ProducerSink(props))
 
 
   /*
-  Process Kafka Records
+  Process Kafka Records and sends it to Kafka Topic
    */
 
-  def processKafkaRecords(kafkaRecord: String): Unit ={
+  def processKafkaRecords(kafkaRecord: String ,ssc :StreamingContext): Unit ={
+
 logger.info("SparkStreaming App Record "+kafkaRecord)
+
+
   }
+
+
+}
+
+/*
+Using this Singleton Object to register a Broad Cast Variable
+ */
+object ProducerSinkBroadcast{
+
 }
