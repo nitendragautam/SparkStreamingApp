@@ -27,7 +27,7 @@ val conf = new SparkConf().setAppName("SparkStreamingApp")
     val consumerTopic = List(kafkaTopic).toSet
 
     // need to use the hostname:port for Kafka brokers, not Zookeeper
-    val kafkaParams = Map[String,String]("metadata.broker.list" -> "192.168.184.131:9092,192.168.184.131:9093,192.168.184.131:9094");
+    val kafkaParams = Map[String,String]("metadata.broker.list" -> "192.168.133.128:9092,192.168.133.128:9093,192.168.133.128:9094");
 
 
     val directKafkaStream =

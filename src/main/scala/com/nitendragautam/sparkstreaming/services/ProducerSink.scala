@@ -39,7 +39,7 @@ Broad Cast Variable
 object ProducerSinkBroadcast{
   @volatile private var kafkaSink : Broadcast[ProducerSink] =null
   val props = new HashMap[String, Object]()
-  props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.184.131:9093")
+  props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.133.128:9093")
   props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
     "org.apache.kafka.common.serialization.StringSerializer")
   props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
