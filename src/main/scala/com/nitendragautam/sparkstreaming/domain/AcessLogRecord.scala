@@ -11,6 +11,6 @@ case class AccessLogRecord(
                             httpRequest :String , //'GET /request
                             httpStatusCode :String , //200 ,404 ,500 etc
                             bytesSent :String, //some value or '-'
-                            siteReferer :String,     //Viitors Source
+                            siteReferer :String,     //Visitors Source
                             userAgent: String   //Browser User Agent
                           )

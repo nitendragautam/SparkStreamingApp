@@ -43,7 +43,7 @@ val conf = new SparkConf().setAppName("SparkStreamingApp")
       rdd.foreachPartition(part =>
         part.foreach(record => {
           // Process the Kafka Records Send to Kafka Topic
-          val processedRecords =accessLogsParser.parseAccessLogsRecord(record._2)
+          val processedRecords =accessLogsParser.parseAccessLogs(record._2).toString
 
           kafkaSink.value.sendMessageToKafka(producerTopic,processedRecords)
 logger.info("message sent to Kafka " +processedRecords)
