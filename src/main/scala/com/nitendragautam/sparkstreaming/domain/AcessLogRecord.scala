@@ -1,7 +1,8 @@
 package com.nitendragautam.sparkstreaming.domain
 
 /*
-Domain Class for Access Logs
+Domain Class for Access Logs which holds the Access Logs
+ref :http://httpd.apache.org/docs/2.4/logs.html
  */
 case class AccessLogRecord(
                             clientAddress :String, //ip address or hostName of the client
