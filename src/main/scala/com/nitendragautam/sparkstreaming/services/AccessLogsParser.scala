@@ -72,5 +72,7 @@ Fields obtained in the Null Object wil be empty strings
     )
   }
 
+def parseURL(logRecord :String): Unit ={
 
+}
 }
