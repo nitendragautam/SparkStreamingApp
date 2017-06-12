@@ -1,8 +1,12 @@
 package com.nitendragautam.sparkstreaming.services
 
+import java.text.SimpleDateFormat
+import java.util.Locale
 import java.util.regex.{Matcher, Pattern}
 
 import com.nitendragautam.sparkstreaming.domain.AccessLogRecord
+
+import scala.util.control.Exception.allCatch
 
 /*
 Logic for Parsing Access Logs
@@ -72,7 +76,35 @@ Fields obtained in the Null Object wil be empty strings
     )
   }
 
-def parseURL(logRecord :String): Unit ={
+  /**
+  passed Paramatere :Http Request Field like "GET /history/skylab/skylab-small.gif HTTP/1.0"
+    *returns a Tuple of (requestType ,uri ,httpVersion)
+    */
 
-}
+  def parseHttpRequestField(httpRequest :String):Option[Tuple3[String,String,String]] ={
+    val splittedArray= httpRequest.split(" ") //Split the Request based on Space
+    if (splittedArray.size == 3)
+      Some((splittedArray(0),splittedArray(1),splittedArray(2)))
+    else
+      None
+  }
+
+  /*
+  Parses the Date Field    "[21/Jun/2010:02:48:13 -0700]"
+   */
+  def parseDateField(dateField :String): Option[java.util.Date] ={
+    val dateFormat ="\\[(.*?) .+]"
+    val datePattern =Pattern.compile(dateFormat) //Using Regex to compile the pattern
+    val dateMatcher =datePattern.matcher(dateField)
+    if(dateMatcher.find){
+      val dateString = dateMatcher.group(1) //Match the Date
+      println(" Date "+dateString)
+
+      val dateFormat = new SimpleDateFormat("dd/MM/yyyy:HH:mm:ss",Locale.ENGLISH)
+      allCatch.opt(dateFormat.parse(dateString))  //Returns Option [Date] //Catches All Exception
+    }else{
+      None
+    }
+  }
+
 }
