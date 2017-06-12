@@ -12,6 +12,7 @@ import org.slf4j.{Logger, LoggerFactory}
 
 /**
   * Spark Services for streaming
+  * 
   */
 class SparkServices extends Serializable{
 val accessLogsParser = new AccessLogsParser
