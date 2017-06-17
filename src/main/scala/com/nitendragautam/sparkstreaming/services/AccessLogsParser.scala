@@ -91,8 +91,9 @@ Fields obtained in the Null Object wil be empty strings
 
   /*
   Parses the Date Field    "[21/Jun/2010:02:48:13 -0700]"
+  and gets the Time in Long
    */
-  def parseDateField(dateField :String): Option[java.util.Date] ={
+  def parseDateField(dateField :String): Option[Long] ={
     val dateFormat ="\\[(.*?) .+]"
     val datePattern =Pattern.compile(dateFormat) //Using Regex to compile the pattern
     val dateMatcher =datePattern.matcher(dateField)
@@ -100,8 +101,8 @@ Fields obtained in the Null Object wil be empty strings
       val dateString = dateMatcher.group(1) //Match the Date
       println(" Date "+dateString)
 
-      val dateFormat = new SimpleDateFormat("dd/MM/yyyy:HH:mm:ss",Locale.ENGLISH)
-      allCatch.opt(dateFormat.parse(dateString))  //Returns Option [Date] //Catches All Exception
+      val dateFormat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss",Locale.ENGLISH)
+      allCatch.opt(dateFormat.parse(dateString).getTime)  //Returns Option [Date] //Catches All Exception
     }else{
       None
     }

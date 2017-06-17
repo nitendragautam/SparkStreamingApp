@@ -2,7 +2,8 @@ package com.nitendragautam.sparkstreaming.services
 
 import java.util.HashMap
 
-
+import com.google.gson.Gson
+import com.nitendragautam.sparkstreaming.domain.KafkaMessage
 import kafka.serializer.StringDecoder
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.spark.{SparkConf, SparkContext}
@@ -35,8 +36,7 @@ val conf = new SparkConf().setAppName("SparkStreamingApp")
 
 
     val directKafkaStream =
-      KafkaUtils.createDirectStream[String,
-        String,
+      KafkaUtils.createDirectStream[String, String,
         StringDecoder,StringDecoder] (ssc,kafkaParams,consumerTopic);
 
     directKafkaStream.foreachRDD(rdd=>
@@ -46,9 +46,15 @@ val conf = new SparkConf().setAppName("SparkStreamingApp")
           // Process the Kafka Records Send to Kafka Topic
           val processedRecords =accessLogsParser.parseAccessLogs(record._2)
 
-          val countData = processedRecords.get.clientAddress
+          val clientIpAddress = processedRecords.get.clientAddress
+          val parsedDate = accessLogsParser.parseDateField(processedRecords.get.dateTime)
+          val httpStatusCode = processedRecords.get.httpStatusCode
 
-          kafkaSink.value.sendMessageToKafka(producerTopic,countData)
+      val kafkaMessage = new KafkaMessage(parsedDate.get,clientIpAddress,httpStatusCode)
+          val messageString = (new Gson).toJson(kafkaMessage)
+
+
+          kafkaSink.value.sendMessageToKafka(producerTopic,messageString)
 logger.info("message sent to Kafka " +processedRecords)
         }
         ))

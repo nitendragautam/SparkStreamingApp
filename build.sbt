@@ -16,6 +16,7 @@ val sparkV     =  "2.0.1"
     "org.apache.spark" % "spark-streaming_2.11" % sparkV % "provided",
     "org.apache.spark" % "spark-core_2.11" % sparkV % "provided",
     "org.apache.spark" % "spark-streaming-kafka-0-8_2.11" % sparkV,
+    "com.google.code.gson" % "gson" % "2.8.1",
     "log4j" % "log4j" % "1.2.17"
 
   )}
