@@ -1,7 +1,7 @@
 package com.nitendragautam.sparkstreaming.services
 
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.{Date, Locale}
 import java.util.regex.{Matcher, Pattern}
 
 import com.nitendragautam.sparkstreaming.domain.AccessLogRecord
@@ -93,7 +93,7 @@ Fields obtained in the Null Object wil be empty strings
   Parses the Date Field    "[21/Jun/2010:02:48:13 -0700]"
   and gets the Time in Long
    */
-  def parseDateField(dateField :String): Option[Long] ={
+  def parseDateField(dateField :String): Option[Date] ={
     val dateFormat ="\\[(.*?) .+]"
     val datePattern =Pattern.compile(dateFormat) //Using Regex to compile the pattern
     val dateMatcher =datePattern.matcher(dateField)
@@ -102,7 +102,7 @@ Fields obtained in the Null Object wil be empty strings
       println(" Date "+dateString)
 
       val dateFormat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss",Locale.ENGLISH)
-      allCatch.opt(dateFormat.parse(dateString).getTime)  //Returns Option [Date] //Catches All Exception
+      allCatch.opt(dateFormat.parse(dateString))  //Returns Option [Date] //Catches All Exception
     }else{
       None
     }

@@ -1,6 +1,7 @@
 package com.nitendragautam.sparkstreaming.services
 
-import java.util.HashMap
+import java.text.SimpleDateFormat
+import java.util.{Date, HashMap}
 
 import com.google.gson.Gson
 import com.nitendragautam.sparkstreaming.domain.KafkaMessage
@@ -77,6 +78,15 @@ logger.info("message sent to Kafka " +processedRecords)
       "org.apache.kafka.common.serialization.StringSerializer")
     props
   }
+
+  /*
+  Converts date into Given Format
+   */
+  def convertDateFormat(dateString :Date ,dateFormat :String): String ={
+    val format = new SimpleDateFormat(dateFormat)
+    format.format(dateString)
+  }
+
 }
 
 
