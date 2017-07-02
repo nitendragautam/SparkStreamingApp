@@ -21,6 +21,7 @@ val accessLogsParser = new AccessLogsParser
   private val logger: Logger =
     LoggerFactory.getLogger(classOf[SparkServices])
 
+  val dateFormat ="YYYY-MM-dd HH:MM:SS"
   def startSparkStreamingCluster(){
 val conf = new SparkConf().setAppName("SparkStreamingApp")
 
@@ -50,8 +51,8 @@ val conf = new SparkConf().setAppName("SparkStreamingApp")
           val clientIpAddress = processedRecords.get.clientAddress
           val parsedDate = accessLogsParser.parseDateField(processedRecords.get.dateTime)
           val httpStatusCode = processedRecords.get.httpStatusCode
-
-      val kafkaMessage = new KafkaMessage(parsedDate.get,clientIpAddress,httpStatusCode)
+          val httpRequestField = accessLogsParser.parseHttpRequestField(processedRecords.get.httpRequest).get._1
+      val kafkaMessage = new KafkaMessage(convertDateFormat(parsedDate.get,dateFormat),clientIpAddress,httpStatusCode ,httpRequestField)
           val messageString = (new Gson).toJson(kafkaMessage)
 
 
@@ -78,6 +79,7 @@ logger.info("message sent to Kafka " +processedRecords)
       "org.apache.kafka.common.serialization.StringSerializer")
     props
   }
+
 
   /*
   Converts date into Given Format
