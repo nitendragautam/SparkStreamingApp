@@ -99,7 +99,6 @@ Fields obtained in the Null Object wil be empty strings
     val dateMatcher =datePattern.matcher(dateField)
     if(dateMatcher.find){
       val dateString = dateMatcher.group(1) //Match the Date
-      println(" Date "+dateString)
 
       val dateFormat = new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss",Locale.ENGLISH)
       allCatch.opt(dateFormat.parse(dateString))  //Returns Option [Date] //Catches All Exception

@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.{Date, HashMap}
 
 import com.google.gson.Gson
-import com.nitendragautam.sparkstreaming.domain.KafkaMessage
+import com.nitendragautam.sparkstreaming.domain.EventMessage
 import kafka.serializer.StringDecoder
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.spark.{SparkConf, SparkContext}
@@ -34,7 +34,7 @@ val conf = new SparkConf().setAppName("SparkStreamingApp")
     val consumerTopic = List(kafkaTopic).toSet
 
     // need to use the hostname:port for Kafka brokers, not Zookeeper
-    val kafkaParams = Map[String,String]("metadata.broker.list" -> "192.168.133.128:9092,192.168.133.128:9093,192.168.133.128:9094");
+    val kafkaParams = Map[String,String]("metadata.broker.list" -> "192.168.133.128:9093,192.168.133.128:9094");
 
 
     val directKafkaStream =
@@ -52,18 +52,16 @@ val conf = new SparkConf().setAppName("SparkStreamingApp")
           val parsedDate = accessLogsParser.parseDateField(processedRecords.get.dateTime)
           val httpStatusCode = processedRecords.get.httpStatusCode
           val httpRequestField = accessLogsParser.parseHttpRequestField(processedRecords.get.httpRequest).get._1
-      val kafkaMessage = new KafkaMessage(convertDateFormat(parsedDate.get,dateFormat),clientIpAddress,httpStatusCode ,httpRequestField)
+          val requestBytes = processedRecords.get.bytesSent
+      val kafkaMessage = new EventMessage(convertDateFormat(parsedDate.get,dateFormat),clientIpAddress,httpStatusCode ,httpRequestField ,requestBytes)
           val messageString = (new Gson).toJson(kafkaMessage)
 
-
+          logger.info("message sending to Kafka " +messageString)
           kafkaSink.value.sendMessageToKafka(producerTopic,messageString)
-logger.info("message sent to Kafka " +processedRecords)
+logger.info("message already sent to Kafka " +messageString +"to Topic " +producerTopic)
         }
         ))
 )
-
-
-
 
     ssc.start()
     ssc.awaitTermination()
