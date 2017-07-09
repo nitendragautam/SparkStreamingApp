@@ -7,7 +7,7 @@ import com.google.gson.Gson
 import com.nitendragautam.sparkstreaming.domain.EventMessage
 import kafka.serializer.StringDecoder
 import org.apache.kafka.clients.producer.ProducerConfig
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.SparkConf
 import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 import org.slf4j.{Logger, LoggerFactory}
@@ -23,7 +23,7 @@ val accessLogsParser = new AccessLogsParser
 
   val dateFormat ="YYYY-MM-dd HH:MM:SS"
   def startSparkStreamingCluster(){
-val conf = new SparkConf().setAppName("SparkStreamingApp")
+   val conf = new SparkConf().setAppName("SparkStreamingApp")
 
      val ssc = new StreamingContext(conf,Seconds(3))
 
@@ -35,7 +35,6 @@ val conf = new SparkConf().setAppName("SparkStreamingApp")
 
     // need to use the hostname:port for Kafka brokers, not Zookeeper
     val kafkaParams = Map[String,String]("metadata.broker.list" -> "192.168.133.128:9093,192.168.133.128:9094");
-
 
     val directKafkaStream =
       KafkaUtils.createDirectStream[String, String,
@@ -51,14 +50,17 @@ val conf = new SparkConf().setAppName("SparkStreamingApp")
           val clientIpAddress = processedRecords.get.clientAddress
           val parsedDate = accessLogsParser.parseDateField(processedRecords.get.dateTime)
           val httpStatusCode = processedRecords.get.httpStatusCode
-          val httpRequestField = accessLogsParser.parseHttpRequestField(processedRecords.get.httpRequest).get._1
-          val requestBytes = processedRecords.get.bytesSent
-      val kafkaMessage = new EventMessage(convertDateFormat(parsedDate.get,dateFormat),clientIpAddress,httpStatusCode ,httpRequestField ,requestBytes)
+          val httpRequestField =
+            accessLogsParser.parseHttpRequestField(processedRecords.get.httpRequest).get._1
+          val httpRequestBytes = processedRecords.get.bytesSent
+          val kafkaMessage = new EventMessage(convertDateFormat(parsedDate.get,dateFormat)
+              ,clientIpAddress,httpStatusCode ,httpRequestField ,httpRequestBytes)
+
           val messageString = (new Gson).toJson(kafkaMessage)
 
           logger.info("message sending to Kafka " +messageString)
           kafkaSink.value.sendMessageToKafka(producerTopic,messageString)
-logger.info("message already sent to Kafka " +messageString +"to Topic " +producerTopic)
+         logger.info("message already sent to Kafka " +messageString +"to Topic " +producerTopic)
         }
         ))
 )
