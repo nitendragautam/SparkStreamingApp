@@ -59,8 +59,8 @@ Fields obtained in the Null Object wil be empty strings
     }else{ //If No matches Found
       AccessLogRecord("","","","","","","","","") //Null Access Record
     }
-
   }
+
   //Group
   private def buildAccessLogRecord(matcher :Matcher)={
     AccessLogRecord(

@@ -1,9 +1,6 @@
 package com.nitendragautam.sparkstreaming.services
 import java.util
-import java.util.HashMap
 import org.apache.kafka.clients.producer.{KafkaProducer,  ProducerRecord}
-
-
 
 
 /**
