@@ -26,7 +26,7 @@ val accessLogsParser = new AccessLogsParser
    val conf = new SparkConf().setAppName("SparkStreamingApp")
 
     //Spark Streaming context
-     val ssc = new StreamingContext(conf,Seconds(3))
+     val ssc = new StreamingContext(conf,Seconds(5))
 
     val props = getProducerProperties() //
     val kafkaSink = ssc.sparkContext.broadcast(ProducerSink(props)) //Broadcasting Kafka Sink
