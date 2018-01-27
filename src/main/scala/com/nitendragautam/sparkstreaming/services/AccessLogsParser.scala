@@ -77,7 +77,7 @@ Fields obtained in the Null Object wil be empty strings
   }
 
   /**
-  passed Paramatere :Http Request Field like "GET /history/skylab/skylab-small.gif HTTP/1.0"
+  passed Paramater :Http Request Field like "GET /history/skylab/skylab-small.gif HTTP/1.0"
     *returns a Tuple of (requestType ,uri ,httpVersion)
     */
 

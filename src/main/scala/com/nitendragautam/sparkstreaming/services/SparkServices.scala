@@ -25,20 +25,22 @@ val accessLogsParser = new AccessLogsParser
   def startSparkStreamingCluster(){
    val conf = new SparkConf().setAppName("SparkStreamingApp")
 
+    //Spark Streaming context
      val ssc = new StreamingContext(conf,Seconds(3))
 
     val props = getProducerProperties() //
     val kafkaSink = ssc.sparkContext.broadcast(ProducerSink(props)) //Broadcasting Kafka Sink
-    val kafkaTopic="ndsloganalytics_raw_events"
-    val producerTopic ="ndsloganalytics_processed_events"
-    val consumerTopic = List(kafkaTopic).toSet
+    val kafkaRawEventTopic="ndsloganalytics_raw_events"
+    val kafkaProcessedEventTopic ="ndsloganalytics_processed_events"
+    val consumerTopic = List(kafkaRawEventTopic).toSet
 
     // need to use the hostname:port for Kafka brokers, not Zookeeper
     val kafkaParams = Map[String,String]("metadata.broker.list" -> "192.168.133.128:9093,192.168.133.128:9094");
 
+    //Create Direct Stream in spark to read data from Kafka
     val directKafkaStream =
       KafkaUtils.createDirectStream[String, String,
-        StringDecoder,StringDecoder] (ssc,kafkaParams,consumerTopic);
+        StringDecoder,StringDecoder] (ssc,kafkaParams,consumerTopic)
 
     directKafkaStream.foreachRDD(rdd=>
 
@@ -59,8 +61,8 @@ val accessLogsParser = new AccessLogsParser
           val messageString = (new Gson).toJson(kafkaMessage)
 
           logger.info("message sending to Kafka " +messageString)
-          kafkaSink.value.sendMessageToKafka(producerTopic,messageString)
-         logger.info("message already sent to Kafka " +messageString +"to Topic " +producerTopic)
+          kafkaSink.value.sendMessageToKafka(kafkaProcessedEventTopic,messageString)
+         logger.info("message already sent to Kafka " +messageString +"to Topic " +kafkaProcessedEventTopic)
         }
         ))
 )

@@ -4,8 +4,7 @@ import org.apache.kafka.clients.producer.{KafkaProducer,  ProducerRecord}
 
 
 /**
-  * Kafka Sink Producer which produces messages in
-  * Kafka
+  * Kafka Sink Producer which produces messages in Kafka
   */
 class ProducerSink(createProducer :() => KafkaProducer[String,String]) extends Serializable {
 
